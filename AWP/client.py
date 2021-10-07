@@ -2,6 +2,7 @@ import socket
 import json
 
 from .logger import getLogger
+from .requestParser import parseRequest, formatRequest
 
 _logger = getLogger('avalonclient')
 
