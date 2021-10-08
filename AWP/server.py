@@ -29,8 +29,7 @@ class Server:
     def _receive(self, conn, buffersize = 4096):
         res = conn.recv(buffersize).decode()
 
-        jres = json.loads(res)
-        return jres
+        return parseRequest(res)
 
     def serve(self, backlog = 5):
         _logger.debug('Binding to ' + str((self.address, self.port)))
@@ -48,11 +47,7 @@ class Server:
             
             _logger.debug('Request from ' + str(addr))
 
-            req = self._receive(conn)
-
-            rType = req['type'] if 'type' in req else 'GET'
-            rPath = req['path'] if 'path' in req else '/'
-            rData = req['data'] if 'data' in req else {}
+            rType, rPath, rVer, rData = self._receive(conn)
 
             for route in self.routes:
                 if route['path'] == rPath:
@@ -67,15 +62,7 @@ class Server:
                         reData = res[1]
                         reDoc = res[2]
 
-                    conn.send(
-                        json.dumps(
-                            {
-                                "code" : reCode,
-                                'data' : reData,
-                                'doc' : reDoc
-                            }
-                        ).encode()
-                    )
+                    conn.send(formatResponse(reCode, reDoc, reData))
 
                     _logger.info(str(addr) + ": " + rType + " " + rPath + " " + str(reCode))
 

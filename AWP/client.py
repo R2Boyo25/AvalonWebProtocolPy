@@ -2,7 +2,7 @@ import socket
 import json
 
 from .logger import getLogger
-from .requestParser import parseRequest, formatRequest
+from .requestParser import parseResponse, formatRequest
 
 _logger = getLogger('avalonclient')
 
@@ -21,30 +21,19 @@ class Client:
 
         self.connect()
 
-        self.socket.send(
-            json.dumps(
-                {
-                    "type" : rType.upper(),
-                    "path" : path, 
-                    "data" : data
-                }
-            ).encode()
-        )
+        self.socket.send(formatRequest(rType.upper(), path, data))
 
         resp = self._receive(buffersize)
 
         self.socket.close()
+        self.socket = socket.socket()
 
         return resp
     
     def _receive(self, buffersize = 4096):
-        rresp = self.socket.recv(buffersize).decode()
-        
-        resp = json.loads(rresp)
+        resp = self.socket.recv(buffersize).decode()
 
-        code = resp['code'] if 'code' in resp else 500
-        data = resp['data'] if 'data' in resp else {}
-        text = resp['doc'] if 'doc' in resp else "<t>No Response</t>"
+        ver, code, codeText, text, data = parseResponse(resp)
 
         return code, text, data
     
