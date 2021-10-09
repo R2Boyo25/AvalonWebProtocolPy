@@ -1,6 +1,7 @@
 setup.py
 AWP/__init__.py
 AWP/client.py
+AWP/compress.py
 AWP/getCode.py
 AWP/logger.py
 AWP/requestParser.py
@@ -8,4 +9,5 @@ AWP/server.py
 AWP.egg-info/PKG-INFO
 AWP.egg-info/SOURCES.txt
 AWP.egg-info/dependency_links.txt
+AWP.egg-info/requires.txt
 AWP.egg-info/top_level.txt

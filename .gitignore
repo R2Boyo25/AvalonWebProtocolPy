@@ -3,4 +3,4 @@ build
 dist
 venv
 *pyc
-AWP.egg-info/*
+AWP.egg-info

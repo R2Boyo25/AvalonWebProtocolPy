@@ -27,7 +27,7 @@ class Server:
         return route_decorator
 
     def _receive(self, conn, buffersize = 4096):
-        res = conn.recv(buffersize).decode()
+        res = conn.recv(buffersize)
 
         return parseRequest(res)
 

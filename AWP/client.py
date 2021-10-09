@@ -31,7 +31,7 @@ class Client:
         return resp
     
     def _receive(self, buffersize = 4096):
-        resp = self.socket.recv(buffersize).decode()
+        resp = self.socket.recv(buffersize)
 
         ver, code, codeText, text, data = parseResponse(resp)
 
